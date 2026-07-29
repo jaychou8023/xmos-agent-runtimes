@@ -79,11 +79,14 @@ jobs:
         shell: bash
         run: |
           docker build -f scripts/Dockerfile.aioncore-linux-x64 -t xmos-runtime-linux-x64 .
-          docker run --rm -v "$PWD:/workspace" xmos-runtime-linux-x64 scripts/prepare-hermes-runtime-payload.mjs \
-            --edition ${{ matrix.edition }} \
-            --platform linux-x64 \
-            --source-root /workspace/build/hermes-source \
-            --output /workspace/build/runtime-payloads/${{ matrix.runtime }}/linux-x64
+          docker run --rm -v "$PWD:/workspace" --entrypoint /bin/bash xmos-runtime-linux-x64 -lc '
+            git config --global --add safe.directory /workspace/build/hermes-source
+            node scripts/prepare-hermes-runtime-payload.mjs \
+              --edition ${{ matrix.edition }} \
+              --platform linux-x64 \
+              --source-root /workspace/build/hermes-source \
+              --output /workspace/build/runtime-payloads/${{ matrix.runtime }}/linux-x64
+          '
           sudo chown -R "$(id -u):$(id -g)" build
       - name: Verify unsigned Hermes payload
         shell: bash
