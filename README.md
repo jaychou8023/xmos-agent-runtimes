@@ -21,3 +21,5 @@ The XMOS desktop application's Host Bridges, permission system, credentials, ses
 6. The signed ZIPs, SHA-256 sums, SBOM and generated release notes are uploaded to a GitHub Release and the formal MinIO release path.
 
 See [docs/RELEASE_PROCESS.md](docs/RELEASE_PROCESS.md) for the release gate, and [docs/MINIO.md](docs/MINIO.md) for object-storage configuration.
+
+The initial candidate workflow is [Build Aion Runtime candidates](.github/workflows/build-aion-runtime-candidates.yml). It builds and verifies unsigned payloads for all supported platforms, then uploads them to GitHub Artifacts and the MinIO candidate prefix. Hermes automation is added separately because its Lite and Max payloads have distinct completeness and platform gates.

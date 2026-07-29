@@ -1,0 +1,18 @@
+FROM quay.io/pypa/manylinux_2_28_x86_64
+
+RUN dnf install -y git curl xz gcc gcc-c++ make cmake pkgconf-pkg-config perl openssl-devel libcurl-devel expat-devel zlib-devel protobuf-compiler \
+    && dnf clean all
+
+RUN curl -fsSLo /tmp/node.tar.xz https://nodejs.org/dist/v24.11.0/node-v24.11.0-linux-x64.tar.xz \
+    && echo "46da9a098973ab7ba4fca76945581ecb2eaf468de347173897044382f10e0a0a  /tmp/node.tar.xz" | sha256sum -c - \
+    && mkdir -p /opt/node \
+    && tar -xJf /tmp/node.tar.xz --strip-components=1 -C /opt/node \
+    && rm /tmp/node.tar.xz
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh \
+    && sh /tmp/rustup.sh -y --default-toolchain 1.95.0 --profile minimal \
+    && rm /tmp/rustup.sh
+
+ENV PATH="/root/.cargo/bin:/opt/node/bin:${PATH}"
+WORKDIR /workspace
+ENTRYPOINT ["node"]
