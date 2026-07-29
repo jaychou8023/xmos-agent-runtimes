@@ -99,7 +99,10 @@ export async function extractArchive(archivePath, destination) {
     await extractZip(archivePath, { dir: destination })
     return
   }
-  await run(process.platform === 'win32' ? 'tar.exe' : 'tar', ['-xf', archivePath, '-C', destination])
+  // bsdtar on Windows interprets `C:\\...` as a remote-style path because of
+  // the drive-letter colon. Forward-slash absolute paths preserve the drive.
+  const tarPath = path => process.platform === 'win32' ? resolve(path).replaceAll('\\', '/') : path
+  await run(process.platform === 'win32' ? 'tar.exe' : 'tar', ['-xf', tarPath(archivePath), '-C', tarPath(destination)])
 }
 
 export function hostRuntimePlatform() {
