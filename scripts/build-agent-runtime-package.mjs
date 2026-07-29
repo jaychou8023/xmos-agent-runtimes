@@ -59,7 +59,7 @@ async function main() {
     if (!args[required]) throw new Error(`Missing --${required}`)
   }
   if (!['darwin-arm64', 'darwin-x64', 'win32-x64', 'linux-x64'].includes(args.platform)) throw new Error('Unsupported --platform')
-  const { lock } = await readRuntimeLock(args.lock)
+  const { lock, lockSha256 } = await readRuntimeLock(args.lock)
   const isHermes = args.runtime === 'hermes'
   if (isHermes && !['lite', 'max'].includes(args.edition)) {
     throw new Error('Hermes Runtime packaging requires --edition lite or max')
@@ -130,6 +130,12 @@ async function main() {
         version, platform: args.platform, minAppVersion: args['min-app-version'] || lock.minimumAppVersion,
         dataCompatibilityVersion: Number(args['data-compatibility-version'] || (releaseGeneration === 'V2' ? 2 : 1)),
         capabilities: definition.capabilities,
+        ...(!isHermes ? {
+          distributionRevision: version.split('+').at(-1),
+          upstreamCommit: lock.aionCli.source.commit,
+          upstreamLockSha256: lockSha256,
+          upstreamVersion: lock.aionCli.version,
+        } : {}),
         ...(isHermes ? {
           capabilityCatalog,
           distributionRevision: version.split('+').at(-1),

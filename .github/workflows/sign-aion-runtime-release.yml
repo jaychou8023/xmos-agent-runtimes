@@ -1,0 +1,125 @@
+name: Sign Aion Runtime release
+
+on:
+  workflow_run:
+    workflows: [Build Aion Runtime candidates]
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: sign-aion-runtime-${{ github.event.workflow_run.id }}
+  cancel-in-progress: false
+
+jobs:
+  sign:
+    name: Sign Aion CLI (${{ matrix.platform }})
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: [self-hosted, macOS, xmos-runtime-signer]
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: darwin-arm64
+            artifact: runtime-candidate-aion-cli-darwin-arm64
+            entry: aioncore
+          - platform: darwin-x64
+            artifact: runtime-candidate-aion-cli-darwin-x64
+            entry: aioncore
+          - platform: win32-x64
+            artifact: runtime-candidate-aion-cli-win32-x64
+            entry: aioncore.exe
+          - platform: linux-x64
+            artifact: runtime-candidate-aion-cli-linux-x64
+            entry: aioncore
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.11.0
+          cache: npm
+      - run: npm ci
+      - id: version
+        run: node scripts/write-runtime-version-output.mjs --runtime aion-cli --github-output "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: candidate-payload
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify candidate payload before signing
+        run: |
+          node scripts/verify-runtime-payload.mjs \
+            --runtime aion-cli \
+            --platform ${{ matrix.platform }} \
+            --payload-root candidate-payload
+      - name: Verify locally held signing key
+        run: |
+          test -n "$XMOS_RUNTIME_SIGNING_KEY_PATH"
+          test -f "$XMOS_RUNTIME_SIGNING_KEY_PATH"
+          node scripts/verify-runtime-signing-key.mjs \
+            --private-key "$XMOS_RUNTIME_SIGNING_KEY_PATH" \
+            --key-id "${XMOS_RUNTIME_SIGNING_KEY_ID:-xmos-runtime-release-2026}"
+      - name: Build signed importable Runtime ZIP
+        run: |
+          mkdir -p release
+          node scripts/build-agent-runtime-package.mjs \
+            --runtime aion-cli \
+            --platform ${{ matrix.platform }} \
+            --payload-root candidate-payload \
+            --runtime-entry ${{ matrix.entry }} \
+            --output release/xmos.aion-cli-${{ steps.version.outputs.value }}-${{ matrix.platform }}.zip \
+            --private-key "$XMOS_RUNTIME_SIGNING_KEY_PATH" \
+            --publisher-key-id "${XMOS_RUNTIME_SIGNING_KEY_ID:-xmos-runtime-release-2026}"
+          shasum -a 256 release/*.zip > release/SHA256SUMS
+          unzip -t release/*.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: signed-aion-runtime-${{ matrix.platform }}
+          path: release
+          retention-days: 90
+
+  publish-minio:
+    name: Publish signed Aion Runtime to MinIO
+    needs: sign
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: darwin-arm64
+            artifact: signed-aion-runtime-darwin-arm64
+          - platform: darwin-x64
+            artifact: signed-aion-runtime-darwin-x64
+          - platform: win32-x64
+            artifact: signed-aion-runtime-win32-x64
+          - platform: linux-x64
+            artifact: signed-aion-runtime-linux-x64
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: release-assets
+      - id: version
+        run: node scripts/write-runtime-version-output.mjs --runtime aion-cli --github-output "$GITHUB_OUTPUT"
+      - uses: ./.github/actions/upload-minio
+        with:
+          source-path: release-assets
+          destination: releases/aion-cli/${{ steps.version.outputs.value }}/${{ matrix.platform }}
+          endpoint: ${{ secrets.MINIO_ENDPOINT }}
+          bucket: ${{ secrets.MINIO_BUCKET }}
+          access-key: ${{ secrets.MINIO_ACCESS_KEY }}
+          secret-key: ${{ secrets.MINIO_SECRET_KEY }}
+          prefix: ${{ vars.MINIO_PREFIX || 'agent/runtimes' }}
+          insecure: ${{ vars.MINIO_INSECURE || 'false' }}

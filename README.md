@@ -17,9 +17,9 @@ The XMOS desktop application's Host Bridges, permission system, credentials, ses
 2. A detected tag creates a review PR under `automation/upstream-*`.
 3. After review, native runners build unsigned candidate payloads and run verification.
 4. Verified unsigned candidates are mirrored automatically to the private MinIO candidate path.
-5. A trusted release machine signs the ZIPs with Ed25519.
-6. The signed ZIPs, SHA-256 sums, SBOM and generated release notes are uploaded to a GitHub Release and the formal MinIO release path.
+5. A trusted macOS signing runner automatically signs successful main-branch candidates with Ed25519.
+6. The signed ZIPs and SHA-256 sums are uploaded to the formal MinIO release path.
 
-See [docs/RELEASE_PROCESS.md](docs/RELEASE_PROCESS.md) for the release gate, and [docs/MINIO.md](docs/MINIO.md) for object-storage configuration.
+See [docs/RELEASE_PROCESS.md](docs/RELEASE_PROCESS.md) for the release gate, [docs/MINIO.md](docs/MINIO.md) for object-storage configuration, and [docs/SIGNING_RUNNER.md](docs/SIGNING_RUNNER.md) to register the trusted signing Mac.
 
 The initial candidate workflow is [Build Aion Runtime candidates](.github/workflows/build-aion-runtime-candidates.yml). It builds and verifies unsigned payloads for all supported platforms, then uploads them to GitHub Artifacts and the MinIO candidate prefix. Hermes automation is added separately because its Lite and Max payloads have distinct completeness and platform gates.
