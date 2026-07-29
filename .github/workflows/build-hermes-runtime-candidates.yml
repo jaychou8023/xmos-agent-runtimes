@@ -1,0 +1,110 @@
+name: Build Hermes Runtime candidates
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - runtimes/runtime-sources.lock.json
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hermes-runtime-candidate-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: ${{ matrix.runtime }} (${{ matrix.platform }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runtime: hermes-lite
+            edition: lite
+            platform: darwin-arm64
+            runner: macos-15
+          - runtime: hermes-lite
+            edition: lite
+            platform: darwin-x64
+            runner: macos-13
+          - runtime: hermes-lite
+            edition: lite
+            platform: win32-x64
+            runner: windows-2025
+          - runtime: hermes-lite
+            edition: lite
+            platform: linux-x64
+            runner: ubuntu-22.04
+          # Max is intentionally limited to macOS ARM64. The other Max platform
+          # dependency closures are not yet release-validated and must not be relabelled.
+          - runtime: hermes-max
+            edition: max
+            platform: darwin-arm64
+            runner: macos-15
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.11.0
+          cache: npm
+      - run: npm ci
+      - id: version
+        shell: bash
+        run: node scripts/write-runtime-version-output.mjs --runtime ${{ matrix.runtime }} --github-output "$GITHUB_OUTPUT"
+      - id: source
+        shell: bash
+        run: node scripts/write-runtime-source-output.mjs --runtime hermes --field commit --github-output "$GITHUB_OUTPUT"
+      - name: Check out locked Hermes source
+        shell: bash
+        run: |
+          git clone --filter=blob:none https://github.com/NousResearch/hermes-agent build/hermes-source
+          git -C build/hermes-source checkout --detach "${{ steps.source.outputs.value }}"
+          test -z "$(git -C build/hermes-source status --porcelain=v1)"
+      - name: Prepare unsigned Hermes payload on macOS or Windows
+        if: matrix.platform != 'linux-x64'
+        shell: bash
+        run: |
+          node scripts/prepare-hermes-runtime-payload.mjs \
+            --edition ${{ matrix.edition }} \
+            --platform ${{ matrix.platform }} \
+            --source-root "$GITHUB_WORKSPACE/build/hermes-source" \
+            --output build/runtime-payloads/${{ matrix.runtime }}/${{ matrix.platform }}
+      - name: Prepare unsigned Hermes payload against manylinux 2.28
+        if: matrix.platform == 'linux-x64'
+        shell: bash
+        run: |
+          docker build -f scripts/Dockerfile.aioncore-linux-x64 -t xmos-runtime-linux-x64 .
+          docker run --rm -v "$PWD:/workspace" xmos-runtime-linux-x64 scripts/prepare-hermes-runtime-payload.mjs \
+            --edition ${{ matrix.edition }} \
+            --platform linux-x64 \
+            --source-root /workspace/build/hermes-source \
+            --output /workspace/build/runtime-payloads/${{ matrix.runtime }}/linux-x64
+          sudo chown -R "$(id -u):$(id -g)" build
+      - name: Verify unsigned Hermes payload
+        shell: bash
+        run: |
+          node scripts/verify-runtime-payload.mjs \
+            --runtime hermes \
+            --edition ${{ matrix.edition }} \
+            --platform ${{ matrix.platform }} \
+            --payload-root build/runtime-payloads/${{ matrix.runtime }}/${{ matrix.platform }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: runtime-candidate-${{ matrix.runtime }}-${{ matrix.platform }}
+          path: build/runtime-payloads/${{ matrix.runtime }}/${{ matrix.platform }}
+          include-hidden-files: true
+          retention-days: 14
+      - uses: ./.github/actions/upload-minio
+        with:
+          source-path: build/runtime-payloads/${{ matrix.runtime }}/${{ matrix.platform }}
+          destination: candidates/${{ matrix.runtime }}/${{ steps.version.outputs.value }}/${{ github.run_id }}/${{ matrix.platform }}
+          endpoint: ${{ secrets.MINIO_ENDPOINT }}
+          bucket: ${{ secrets.MINIO_BUCKET }}
+          access-key: ${{ secrets.MINIO_ACCESS_KEY }}
+          secret-key: ${{ secrets.MINIO_SECRET_KEY }}
+          prefix: ${{ vars.MINIO_PREFIX || 'agent/runtimes' }}
+          insecure: ${{ vars.MINIO_INSECURE || 'false' }}

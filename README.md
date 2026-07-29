@@ -22,4 +22,4 @@ The XMOS desktop application's Host Bridges, permission system, credentials, ses
 
 See [docs/RELEASE_PROCESS.md](docs/RELEASE_PROCESS.md) for the release gate, [docs/MINIO.md](docs/MINIO.md) for object-storage configuration, and [docs/SIGNING_RUNNER.md](docs/SIGNING_RUNNER.md) to register the trusted signing Mac.
 
-The initial candidate workflow is [Build Aion Runtime candidates](.github/workflows/build-aion-runtime-candidates.yml). It builds and verifies unsigned payloads for all supported platforms, then uploads them to GitHub Artifacts and the MinIO candidate prefix. Hermes automation is added separately because its Lite and Max payloads have distinct completeness and platform gates.
+Candidate workflows are [Build Aion Runtime candidates](.github/workflows/build-aion-runtime-candidates.yml) and [Build Hermes Runtime candidates](.github/workflows/build-hermes-runtime-candidates.yml). They build and verify unsigned payloads before uploading them to GitHub Artifacts and the MinIO candidate prefix. Hermes Lite is built for all supported platforms; Hermes Max is limited to macOS ARM64 until its other platform dependency closures pass release validation.
