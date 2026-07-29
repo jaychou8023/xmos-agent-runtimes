@@ -1,0 +1,9 @@
+node_modules/
+build/
+release/
+.DS_Store
+*.log
+*.partial-*
+*.key
+*.pem
+*.p12

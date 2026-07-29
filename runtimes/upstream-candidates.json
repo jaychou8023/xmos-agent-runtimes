@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "xmos-runtime-upstream-candidates/1",
+  "candidates": {
+    "aion-cli": {
+      "repository": "https://github.com/iOfficeAI/AionCore",
+      "locked": {
+        "version": "0.1.36",
+        "commit": "0447482a0605c692d101a3c8c12327686c307b7d"
+      },
+      "latest": {
+        "tag": "v0.1.53",
+        "commit": "1644ef26c168e8002dcfa53ccd333054b40697d6",
+        "version": "0.1.53"
+      },
+      "updateAvailable": true,
+      "requiresReview": true,
+      "needsLockRefresh": [
+        "source.commit",
+        "version",
+        "native binary checksums"
+      ]
+    },
+    "hermes": {
+      "repository": "https://github.com/NousResearch/hermes-agent",
+      "locked": {
+        "version": "0.18.2",
+        "commit": "5057f03bfdce539b3a2ed28b84920586f9c54338"
+      },
+      "latest": {
+        "tag": "v2026.7.20",
+        "commit": "3ef6bbd201263d354fd83ec55b3c306ded2eb72a",
+        "version": "2026.7.20"
+      },
+      "updateAvailable": true,
+      "requiresReview": true,
+      "needsLockRefresh": [
+        "source.commit",
+        "version mapping",
+        "uv.lock checksum",
+        "package lock checksum",
+        "platform dependency checksums"
+      ]
+    }
+  },
+  "note": "A candidate is not an approved source lock or release. Review the upstream delta and rebuild all locked platform artifacts before updating runtime-sources.lock.json."
+}

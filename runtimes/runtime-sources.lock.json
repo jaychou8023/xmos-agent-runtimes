@@ -1,0 +1,355 @@
+{
+  "schemaVersion": "xmos-runtime-sources/1",
+  "publisherKeyId": "xmos-runtime-release-2026",
+  "driverProtocol": "xmos-agent-runtime/1",
+  "minimumAppVersion": "0.1.2",
+  "build": {
+    "sourceDateEpoch": 1783987200,
+    "uvVersion": "0.11.28",
+    "runners": {
+      "darwin-arm64": "macos-15",
+      "darwin-x64": "macos-13-intel",
+      "win32-x64": "windows-2025",
+      "linux-x64": "ubuntu-22.04"
+    },
+    "linuxContainer": "quay.io/pypa/manylinux_2_28_x86_64"
+  },
+  "aionCli": {
+    "runtimeId": "xmos.aion-cli",
+    "version": "0.1.36",
+    "artifactVersion": "0.1.36+xmos.1",
+    "distributionRevision": "xmos.1",
+    "source": {
+      "repository": "https://github.com/iOfficeAI/AionCore",
+      "commit": "0447482a0605c692d101a3c8c12327686c307b7d",
+      "patches": [],
+      "rustToolchain": "1.95.0"
+    },
+    "binaries": {
+    "darwin-arm64": {
+        "path": "build/native/darwin-arm64/aioncore",
+        "sha256": "f54131a2ba5f2f344f0b3af2b12a93d245211a8a7a8ac476fb542e024f622822",
+        "format": "mach-o-arm64"
+      },
+      "darwin-x64": {
+        "path": "build/native/darwin-x64/aioncore",
+        "sha256": "c03ece84f2bfc75c028aa6a891051a1328f5f54f786cd7966bcdfc4896714c85",
+        "format": "macho-x86_64"
+      },
+      "win32-x64": {
+        "path": "build/native/win32-x64/aioncore.exe",
+        "sha256": "eebb38ef968fb75c0392554fb1b613415a1a70db6599db2e29fbdc9da062f330",
+        "format": "pe-x64-gnu-static-crt"
+      },
+      "linux-x64": {
+        "path": "build/native/linux-x64/aioncore",
+        "sha256": "ace5b43c86afa6cb3cc9e9ffe703aa1f7c7523991397c1ecbc7642bb901aabc8",
+        "format": "elf-x64-glibc-2.28",
+        "maxGlibc": "2.28"
+      }
+    },
+    "managedNode": {
+      "version": "24.11.0",
+      "platforms": {
+        "darwin-arm64": {
+          "file": "node-v24.11.0-darwin-arm64.tar.gz",
+          "url": "https://nodejs.org/dist/v24.11.0/node-v24.11.0-darwin-arm64.tar.gz",
+          "sha256": "0be2ab2816a4fa02d1acff014a434f29f56d8d956f5af6a98b70ced6c5f4d201",
+          "directory": "node-v24.11.0-darwin-arm64",
+          "entry": "bin/node"
+        },
+        "darwin-x64": {
+          "file": "node-v24.11.0-darwin-x64.tar.gz",
+          "url": "https://nodejs.org/dist/v24.11.0/node-v24.11.0-darwin-x64.tar.gz",
+          "sha256": "3884671e87f46f773832d98a0a6cabcc5ec4f637084f0f3515b69e66ea27f2f1",
+          "directory": "node-v24.11.0-darwin-x64",
+          "entry": "bin/node"
+        },
+        "win32-x64": {
+          "file": "node-v24.11.0-win-x64.zip",
+          "url": "https://nodejs.org/dist/v24.11.0/node-v24.11.0-win-x64.zip",
+          "sha256": "1054540bce22b54ec7e50ebc078ec5d090700a77657607a58f6a64df21f49fdd",
+          "directory": "node-v24.11.0-win-x64",
+          "entry": "node.exe"
+        },
+        "linux-x64": {
+          "file": "node-v24.11.0-linux-x64.tar.xz",
+          "url": "https://nodejs.org/dist/v24.11.0/node-v24.11.0-linux-x64.tar.xz",
+          "sha256": "46da9a098973ab7ba4fca76945581ecb2eaf468de347173897044382f10e0a0a",
+          "directory": "node-v24.11.0-linux-x64",
+          "entry": "bin/node"
+        }
+      }
+    }
+  },
+  "hermes": {
+    "runtimeId": "xmos.hermes",
+    "version": "0.18.2",
+    "artifactVersions": {
+      "lite": "0.18.2+xmos.3",
+      "max": "0.18.2+xmos.2"
+    },
+    "source": {
+      "repository": "https://github.com/NousResearch/hermes-agent",
+      "commit": "5057f03bfdce539b3a2ed28b84920586f9c54338",
+      "uvLockSha256": "92d8153c76379a4d427eaf37cd77cedef9dc093c6c44c1386abd4546578f709a",
+      "packageLockSha256": "bc11d099f043e142764e66f60f2b558add882948649101645d56319d188861df",
+      "photonSidecarLockSha256": "9d72974a52cb890f3152a6a8b2a0c1ae190cdb9ae4ca13335a278c0a99065189",
+      "patches": []
+    },
+    "python": {
+      "version": "3.11.15",
+      "release": "20260623",
+      "platforms": {
+        "darwin-arm64": {
+          "file": "cpython-3.11.15+20260623-aarch64-apple-darwin-install_only_stripped.tar.gz",
+          "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.11.15%2B20260623-aarch64-apple-darwin-install_only_stripped.tar.gz",
+          "sha256": "2318799eaf104f8a29bc09a93b0851b05dbbcb4ce9a5f045ddea169c0c7ff3a5",
+          "entry": "python/bin/python3"
+        },
+        "darwin-x64": {
+          "file": "cpython-3.11.15+20260623-x86_64-apple-darwin-install_only_stripped.tar.gz",
+          "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.11.15%2B20260623-x86_64-apple-darwin-install_only_stripped.tar.gz",
+          "sha256": "4925e5aaa9bc77c85302d350b36c1d9def2002996a6bcfa55c88ba6eb318de29",
+          "entry": "python/bin/python3"
+        },
+        "win32-x64": {
+          "file": "cpython-3.11.15+20260623-x86_64-pc-windows-msvc-install_only_stripped.tar.gz",
+          "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.11.15%2B20260623-x86_64-pc-windows-msvc-install_only_stripped.tar.gz",
+          "sha256": "6589ca6d63f520bec4096d62b3ab91da3d0a80b16b594c99a6b677e335814683",
+          "entry": "python/python.exe"
+        },
+        "linux-x64": {
+          "file": "cpython-3.11.15+20260623-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz",
+          "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.11.15%2B20260623-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz",
+          "sha256": "0604cd029b142dc223e131f17f5941c0c8d2d5074997c8178b515b19eea2a6c2",
+          "entry": "python/bin/python3"
+        }
+      }
+    },
+    "managedNode": {
+      "source": "aionCli.managedNode"
+    },
+    "managedTools": {
+      "ripgrep": {
+        "version": "14.1.1",
+        "platforms": {
+          "darwin-arm64": {
+            "file": "ripgrep-14.1.1-aarch64-apple-darwin.tar.gz",
+            "url": "https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-aarch64-apple-darwin.tar.gz",
+            "sha256": "24ad76777745fbff131c8fbc466742b011f925bfa4fffa2ded6def23b5b937be",
+            "directory": "ripgrep-14.1.1-aarch64-apple-darwin",
+          "entry": "rg"
+        },
+        "darwin-x64": {
+          "file": "ripgrep-14.1.1-x86_64-apple-darwin.tar.gz",
+          "url": "https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-apple-darwin.tar.gz",
+          "sha256": "fc87e78f7cb3fea12d69072e7ef3b21509754717b746368fd40d88963630e2b3",
+          "directory": "ripgrep-14.1.1-x86_64-apple-darwin",
+          "entry": "rg"
+        },
+        "win32-x64": {
+            "file": "ripgrep-14.1.1-x86_64-pc-windows-msvc.zip",
+            "url": "https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-pc-windows-msvc.zip",
+            "sha256": "d0f534024c42afd6cb4d38907c25cd2b249b79bbe6cc1dbee8e3e37c2b6e25a1",
+            "directory": "ripgrep-14.1.1-x86_64-pc-windows-msvc",
+            "entry": "rg.exe"
+          },
+          "linux-x64": {
+            "file": "ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz",
+            "url": "https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz",
+            "sha256": "4cf9f2741e6c465ffdb7c26f38056a59e2a2544b51f7cc128ef28337eeae4d8e",
+            "directory": "ripgrep-14.1.1-x86_64-unknown-linux-musl",
+            "entry": "rg"
+          }
+        }
+      },
+      "ffmpeg": {
+        "version": "7.1",
+        "distribution": "imageio-ffmpeg",
+        "distributionVersion": "0.6.0",
+        "license": {
+          "file": "FFmpeg-7.1-COPYING.GPLv3",
+          "url": "https://raw.githubusercontent.com/FFmpeg/FFmpeg/n7.1/COPYING.GPLv3",
+          "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903"
+        },
+        "platforms": {
+          "darwin-arm64": {
+            "file": "imageio_ffmpeg-0.6.0-py3-none-macosx_11_0_arm64.whl",
+            "url": "https://files.pythonhosted.org/packages/40/5c/f3d8a657d362cc93b81aab8feda487317da5b5d31c0e1fdfd5e986e55d17/imageio_ffmpeg-0.6.0-py3-none-macosx_11_0_arm64.whl",
+            "sha256": "b1ae3173414b5fc5f538a726c4e48ea97edc0d2cdc11f103afee655c463fa742",
+            "entry": "imageio_ffmpeg/binaries/ffmpeg-macos-aarch64-v7.1",
+          "licenseEntry": "imageio_ffmpeg-0.6.0.dist-info/LICENSE"
+        },
+        "darwin-x64": {
+          "file": "imageio_ffmpeg-0.6.0-py3-none-macosx_10_9_intel.macosx_10_9_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/da/58/87ef68ac83f4c7690961bce288fd8e382bc5f1513860fc7f90a9c1c1c6bf/imageio_ffmpeg-0.6.0-py3-none-macosx_10_9_intel.macosx_10_9_x86_64.whl",
+          "sha256": "9d2baaf867088508d4a3458e61eeb30e945c4ad8016025545f66c4b5aaef0a61",
+          "entry": "imageio_ffmpeg/binaries/ffmpeg-macos-x86_64-v7.1",
+          "licenseEntry": "imageio_ffmpeg-0.6.0.dist-info/LICENSE"
+        },
+        "win32-x64": {
+            "file": "imageio_ffmpeg-0.6.0-py3-none-win_amd64.whl",
+            "url": "https://files.pythonhosted.org/packages/2c/c6/fa760e12a2483469e2bf5058c5faff664acf66cadb4df2ad6205b016a73d/imageio_ffmpeg-0.6.0-py3-none-win_amd64.whl",
+            "sha256": "02fa47c83703c37df6bfe4896aab339013f62bf02c5ebf2dce6da56af04ffc0a",
+            "entry": "imageio_ffmpeg/binaries/ffmpeg-win-x86_64-v7.1.exe",
+            "licenseEntry": "imageio_ffmpeg-0.6.0.dist-info/LICENSE"
+          },
+          "linux-x64": {
+            "file": "imageio_ffmpeg-0.6.0-py3-none-manylinux2014_x86_64.whl",
+            "url": "https://files.pythonhosted.org/packages/a0/2d/43c8522a2038e9d0e7dbdf3a61195ecc31ca576fb1527a528c877e87d973/imageio_ffmpeg-0.6.0-py3-none-manylinux2014_x86_64.whl",
+            "sha256": "c7e46fcec401dd990405049d2e2f475e2b397779df2519b544b8aab515195282",
+            "entry": "imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2",
+            "licenseEntry": "imageio_ffmpeg-0.6.0.dist-info/LICENSE"
+          }
+        }
+      },
+      "git": {
+        "version": "2.47.1",
+        "source": {
+          "file": "git-2.47.1.tar.xz",
+          "url": "https://www.kernel.org/pub/software/scm/git/git-2.47.1.tar.xz",
+          "sha256": "f3d8f9bb23ae392374e91cd9d395970dabc5b9c5ee72f39884613cd84a6ed310",
+          "directory": "git-2.47.1"
+        },
+        "platforms": {
+          "win32-x64": {
+            "file": "MinGit-2.47.1-64-bit.zip",
+            "url": "https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.1/MinGit-2.47.1-64-bit.zip",
+            "sha256": "50b04b55425b5c465d076cdb184f63a0cd0f86f6ec8bb4d5860114a713d2c29a",
+            "entry": "cmd/git.exe"
+          }
+        }
+      }
+    },
+    "agentBrowser": {
+      "version": "0.26.0",
+      "license": {
+        "file": "agent-browser-LICENSE",
+        "url": "https://raw.githubusercontent.com/vercel-labs/agent-browser/v0.26.0/LICENSE",
+        "sha256": "014bb31e83d5c2e76aea1cc6e82217346ab41362f32cb355ad0f5c10aa0aeaff"
+      },
+      "platforms": {
+        "darwin-arm64": {
+          "file": "agent-browser-darwin-arm64",
+          "url": "https://github.com/vercel-labs/agent-browser/releases/download/v0.26.0/agent-browser-darwin-arm64",
+          "sha256": "18f7af7c57ab522bd80f64112b8d7ff43e63a98d98064ba13a96363aa9ae2650"
+        },
+        "darwin-x64": {
+          "file": "agent-browser-darwin-x64",
+          "url": "https://github.com/vercel-labs/agent-browser/releases/download/v0.26.0/agent-browser-darwin-x64",
+          "sha256": "f5198f4485430ff425f7682db405eca66b80ad82d501d04d6d409574dd4283db"
+        },
+        "win32-x64": {
+          "file": "agent-browser-win32-x64.exe",
+          "url": "https://github.com/vercel-labs/agent-browser/releases/download/v0.26.0/agent-browser-win32-x64.exe",
+          "sha256": "540fc7d8b3ec8dea2f84df605492d5ca0e1921281adf8543dc0326109c851b2a"
+        },
+        "linux-x64": {
+          "file": "agent-browser-linux-x64",
+          "url": "https://github.com/vercel-labs/agent-browser/releases/download/v0.26.0/agent-browser-linux-x64",
+          "sha256": "8784dc259abf72ee04e751b45677d956387af50c99aec5dcd7a41a9bc498e3c3"
+        }
+      }
+    },
+    "chromium": {
+      "version": "149.0.7827.55",
+      "platforms": {
+        "darwin-arm64": {
+          "file": "chrome-mac-arm64.zip",
+          "url": "https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.55/mac-arm64/chrome-mac-arm64.zip",
+          "sha256": "311211b54c429245e2cec0314ee1e314085e9c00350215b95e1a879350786630",
+          "directory": "chrome-mac-arm64",
+          "entry": "Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"
+        },
+        "darwin-x64": {
+          "file": "chrome-mac-x64.zip",
+          "url": "https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.55/mac-x64/chrome-mac-x64.zip",
+          "sha256": "4fff3b1bff4ab5acab495438d501fd56ecd326fc2e18670858930386dca864e6",
+          "directory": "chrome-mac-x64",
+          "entry": "Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing"
+        },
+        "win32-x64": {
+          "file": "chrome-win64.zip",
+          "url": "https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.55/win64/chrome-win64.zip",
+          "sha256": "ebc0c2b75e2ea98151a7f18ff47037bfcbab44a8660e79b9ffa6520f9b7607ab",
+          "directory": "chrome-win64",
+          "entry": "chrome.exe"
+        },
+        "linux-x64": {
+          "file": "chrome-linux64.zip",
+          "url": "https://storage.googleapis.com/chrome-for-testing-public/149.0.7827.55/linux64/chrome-linux64.zip",
+          "sha256": "13113b963ac22fffdad898a677591028e4397c46c1daa9e61811258eed6e35b5",
+          "directory": "chrome-linux64",
+          "entry": "chrome"
+        }
+      }
+    },
+    "voiceModel": {
+      "repository": "Systran/faster-whisper-base",
+      "revision": "ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66",
+      "files": [
+        {
+          "file": "README.md",
+          "url": "https://huggingface.co/Systran/faster-whisper-base/resolve/ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66/README.md",
+          "sha256": "b922acef3616e27b1d416260b63ba7114c732f0315012006781af2da69cd1ebf"
+        },
+        {
+          "file": "config.json",
+          "url": "https://huggingface.co/Systran/faster-whisper-base/resolve/ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66/config.json",
+          "sha256": "56a6d8110d311f19c8f0471e562832c7527f146b567275bfca59fcf7c184da9a"
+        },
+        {
+          "file": "model.bin",
+          "url": "https://huggingface.co/Systran/faster-whisper-base/resolve/ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66/model.bin",
+          "sha256": "d01c3014881c9c6f3133c182f3d2887eb6ca1c789a7538c5c007196857a0a6a9"
+        },
+        {
+          "file": "tokenizer.json",
+          "url": "https://huggingface.co/Systran/faster-whisper-base/resolve/ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66/tokenizer.json",
+          "sha256": "fb7b63191e9bb045082c79fd742a3106a12c99513ab30df4a0d47fa6cb6fd0ab"
+        },
+        {
+          "file": "vocabulary.txt",
+          "url": "https://huggingface.co/Systran/faster-whisper-base/resolve/ebe41f70d5b6dfa9166e2c581c45c9c0cfc57b66/vocabulary.txt",
+          "sha256": "34ce3fe1c5041027b3f8d42912270993f986dbc4bb34cf27f951e34a1e453913"
+        }
+      ]
+    },
+    "platformUnsupported": {
+      "darwin-arm64": {
+        "extras": [
+          "matrix"
+        ],
+      "packages": [
+        "mautrix",
+        "python-olm"
+      ]
+      },
+    "darwin-x64": {
+        "extras": [
+          "matrix"
+        ],
+      "packages": [
+        "mautrix",
+        "python-olm",
+        "nemo-relay",
+        "onnxruntime"
+        ]
+      },
+      "win32-x64": {
+        "extras": [
+          "matrix"
+        ],
+        "packages": [
+          "mautrix",
+          "python-olm"
+        ]
+      },
+      "linux-x64": {
+        "extras": [],
+        "packages": []
+      }
+    }
+  }
+}

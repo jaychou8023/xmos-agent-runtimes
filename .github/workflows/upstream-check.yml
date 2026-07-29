@@ -1,0 +1,39 @@
+name: Check Runtime upstreams
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 2 * * 1'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: runtime-upstream-check
+  cancel-in-progress: false
+
+jobs:
+  detect:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.11.0
+      - name: Detect upstream release candidates
+        run: npm run upstream:check -- --write-candidates runtimes/upstream-candidates.json
+      - name: Open review PR when candidates change
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/runtime-upstream-candidates
+          delete-branch: true
+          commit-message: 'chore(runtime): refresh upstream candidates'
+          title: 'chore(runtime): review upstream release candidates'
+          body: |
+            This automated PR records upstream tags and commits. It is not a Runtime release.
+
+            Before merging, update `runtime-sources.lock.json`, dependency checksums, provenance expectations and release notes through the candidate-build workflow.
