@@ -13,7 +13,8 @@
     "runtime:prepare:aion": "node scripts/prepare-aion-runtime-payload.mjs",
     "runtime:prepare:hermes": "node scripts/prepare-hermes-runtime-payload.mjs",
     "runtime:verify-payload": "node scripts/verify-runtime-payload.mjs",
-    "runtime:package": "node scripts/build-agent-runtime-package.mjs"
+    "runtime:package": "node scripts/build-agent-runtime-package.mjs",
+    "runtime:sign:aion:win": "node scripts/sign-aion-windows-candidate.mjs"
   },
   "dependencies": {
     "extract-zip": "2.0.1",

@@ -118,6 +118,10 @@ async function main() {
       throw new Error(`Hermes ${edition} must use signed lock version ${definition.version}`)
     }
     const releaseGeneration = isHermes ? (edition === 'max' ? 'V2' : 'V1') : undefined
+    const upstreamLockSha256 = args['upstream-lock-sha'] || lockSha256
+    if (!/^[a-f0-9]{64}$/.test(upstreamLockSha256)) {
+      throw new Error('--upstream-lock-sha must be a SHA-256 hex digest')
+    }
     const displayName = isHermes
       ? (args['display-name'] || (edition === 'max' ? 'Hermes Max' : 'Hermes Lite'))
       : definition.displayName
@@ -133,7 +137,7 @@ async function main() {
         ...(!isHermes ? {
           distributionRevision: version.split('+').at(-1),
           upstreamCommit: lock.aionCli.source.commit,
-          upstreamLockSha256: lockSha256,
+          upstreamLockSha256,
           upstreamVersion: lock.aionCli.version,
         } : {}),
         ...(isHermes ? {

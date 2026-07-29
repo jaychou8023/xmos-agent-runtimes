@@ -123,6 +123,7 @@ async function main() {
         ],
       },
     })
+    await cp(lockPath, join(output, '.xmos-build', 'runtime-sources.lock.json'))
   } finally {
     await rm(extracted, { force: true, recursive: true })
   }
