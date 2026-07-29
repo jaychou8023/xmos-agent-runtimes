@@ -4,16 +4,16 @@ The Aion candidate workflow produces unsigned payloads. The `Sign Aion Runtime r
 
 ## 1. Prepare the private key on the signing Mac
 
-The trusted publisher public key already committed in `runtimes/runtime-trust.json` is `xmos-runtime-release-2026`. Copy its matching Ed25519 private key to a directory readable only by the signing account, for example:
+The active publisher public key committed in `runtimes/runtime-trust.json` is `xmos-runtime-release-2026-07`. Its matching Ed25519 private key is stored only on the signing Mac, for example:
 
 ```text
-/Users/liyc/.xmos-signing/xmos-runtime-release-2026.pem
+/Users/liyc/.xmos-signing/xmos-runtime-release-2026-07.pem
 ```
 
 Do not put the private key in this repository, GitHub Secrets, MinIO, chat logs or a Runtime ZIP. Restrict the file to its owner:
 
 ```bash
-chmod 600 /Users/liyc/.xmos-signing/xmos-runtime-release-2026.pem
+chmod 600 /Users/liyc/.xmos-signing/xmos-runtime-release-2026-07.pem
 ```
 
 Before registering the runner, verify that this is the private half of the already trusted key:
@@ -21,7 +21,7 @@ Before registering the runner, verify that this is the private half of the alrea
 ```bash
 cd /Users/liyc/Documents/xmos-agent-runtimes
 node scripts/verify-runtime-signing-key.mjs \
-  --private-key /Users/liyc/.xmos-signing/xmos-runtime-release-2026.pem
+  --private-key /Users/liyc/.xmos-signing/xmos-runtime-release-2026-07.pem
 ```
 
 If this check says the key does not match, stop. Do not create a new key until the XMOS desktop application's trusted public-key list is updated and released.
@@ -39,8 +39,8 @@ The workflow targets `self-hosted`, `macOS`, and `xmos-runtime-signer`, so ordin
 Install the runner as a background service under the same macOS user that can read the private key. Set these environment variables in that runner service environment, not in GitHub:
 
 ```text
-XMOS_RUNTIME_SIGNING_KEY_PATH=/Users/liyc/.xmos-signing/xmos-runtime-release-2026.pem
-XMOS_RUNTIME_SIGNING_KEY_ID=xmos-runtime-release-2026
+XMOS_RUNTIME_SIGNING_KEY_PATH=/Users/liyc/.xmos-signing/xmos-runtime-release-2026-07.pem
+XMOS_RUNTIME_SIGNING_KEY_ID=xmos-runtime-release-2026-07
 ```
 
 The runner also needs Node.js 24 or permission for `actions/setup-node` to install it, plus outbound access to GitHub, MinIO, and locked dependency sources.

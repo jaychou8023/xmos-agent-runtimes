@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "keys": {
-    "xmos-runtime-release-2026": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAcUVZyscGBXy2lNuQKhkqJNf8dRS7sY7IXx+oq+0z2aM=\n-----END PUBLIC KEY-----\n"
+    "xmos-runtime-release-2026": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAcUVZyscGBXy2lNuQKhkqJNf8dRS7sY7IXx+oq+0z2aM=\n-----END PUBLIC KEY-----\n",
+    "xmos-runtime-release-2026-07": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAikuLkclrN5bE8HTqWozHlAHEUvX1dtt3ZoUDOxdk+g8=\n-----END PUBLIC KEY-----\n"
   }
 }

@@ -21,7 +21,7 @@ async function main() {
   if (!options['private-key']) throw new Error('Missing --private-key')
   const trustPath = resolve(options.trust || 'runtimes/runtime-trust.json')
   const trust = JSON.parse(await readFile(trustPath, 'utf8'))
-  const keyId = options['key-id'] || 'xmos-runtime-release-2026'
+  const keyId = options['key-id'] || 'xmos-runtime-release-2026-07'
   const expected = trust.keys?.[keyId]
   if (!expected) throw new Error(`Unknown signing key ID: ${keyId}`)
   const privateKey = createPrivateKey(await readFile(resolve(options['private-key']), 'utf8'))

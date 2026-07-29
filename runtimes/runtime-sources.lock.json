@@ -1,6 +1,6 @@
 {
   "schemaVersion": "xmos-runtime-sources/1",
-  "publisherKeyId": "xmos-runtime-release-2026",
+  "publisherKeyId": "xmos-runtime-release-2026-07",
   "driverProtocol": "xmos-agent-runtime/1",
   "minimumAppVersion": "0.1.2",
   "build": {
