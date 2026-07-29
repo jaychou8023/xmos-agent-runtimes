@@ -23,7 +23,7 @@ inputs:
   prefix:
     description: Optional bucket prefix.
     required: false
-    default: agent
+    default: agent/runtimes
   insecure:
     description: Set to true only for a trusted MinIO endpoint with a self-signed certificate.
     required: false
@@ -74,6 +74,14 @@ runs:
         export AWS_CONFIG_FILE
         aws configure set default.s3.addressing_style path
         target="s3://$MINIO_BUCKET/${MINIO_PREFIX#/}/$DESTINATION"
+        probe_args=(s3api head-bucket --bucket "$MINIO_BUCKET" --endpoint-url "$MINIO_ENDPOINT")
+        if [ "$MINIO_INSECURE" = 'true' ]; then
+          probe_args+=(--no-verify-ssl)
+        fi
+        if ! aws "${probe_args[@]}"; then
+          echo "MinIO bucket is unavailable: $MINIO_BUCKET at $MINIO_ENDPOINT. Verify MINIO_BUCKET, MINIO_ENDPOINT, TLS mode, and service-account bucket access." >&2
+          exit 1
+        fi
         upload_args=(s3 cp "$SOURCE_PATH" "$target" --recursive --endpoint-url "$MINIO_ENDPOINT" --only-show-errors)
         if [ "$MINIO_INSECURE" = 'true' ]; then
           upload_args+=(--no-verify-ssl)

@@ -21,7 +21,7 @@ Under **Settings → Secrets and variables → Actions → Variables**, add the 
 
 | Variable | Recommended value | Meaning |
 |---|---|---|
-| `MINIO_PREFIX` | `agent` | Bucket prefix for all Runtime artifacts inside the `xmos` bucket |
+| `MINIO_PREFIX` | `agent/runtimes` | Bucket prefix for all Runtime artifacts inside the `xmos` bucket |
 | `MINIO_INSECURE` | `false` | Set to `true` only when the endpoint is trusted and has a self-signed certificate |
 
 The endpoint should use a valid HTTPS certificate. `MINIO_INSECURE=true` disables TLS certificate verification and is a temporary private-network exception, not a normal production setting.
@@ -31,19 +31,19 @@ The endpoint should use a valid HTTPS certificate. `MINIO_INSECURE=true` disable
 The reusable candidate-upload workflow stores build outputs under:
 
 ```text
-s3://<MINIO_BUCKET>/agent/candidates/<runtime>/<version>/<github-run-id>/<platform>/
+s3://<MINIO_BUCKET>/agent/runtimes/candidates/<runtime>/<version>/<github-run-id>/<platform>/
 ```
 
 For example:
 
 ```text
-s3://xmos/agent/candidates/hermes-lite/0.18.2+xmos.3/123456789/darwin-arm64/
+s3://xmos/agent/runtimes/candidates/hermes-lite/0.18.2+xmos.3/123456789/darwin-arm64/
 ```
 
 The later formal-release workflow will use a separate, stable location:
 
 ```text
-s3://<MINIO_BUCKET>/agent/releases/<runtime>/<version>/
+s3://<MINIO_BUCKET>/agent/runtimes/releases/<runtime>/<version>/
 ```
 
 Do not overwrite a formal release object. Enable MinIO versioning and a lifecycle policy that expires unsigned `candidates/` objects after an appropriate review period, such as 30 days.

@@ -68,6 +68,7 @@ jobs:
             --platform linux-x64 \
             --output build/native/linux-x64/aioncore \
             --license-output build/native/linux-x64/AionCore-LICENSE.txt
+          sudo chown -R "$(id -u):$(id -g)" build
       - name: Prepare unsigned Runtime payload
         shell: bash
         run: |
@@ -98,5 +99,5 @@ jobs:
           bucket: ${{ secrets.MINIO_BUCKET }}
           access-key: ${{ secrets.MINIO_ACCESS_KEY }}
           secret-key: ${{ secrets.MINIO_SECRET_KEY }}
-          prefix: ${{ vars.MINIO_PREFIX || 'runtimes' }}
+          prefix: ${{ vars.MINIO_PREFIX || 'agent/runtimes' }}
           insecure: ${{ vars.MINIO_INSECURE || 'false' }}

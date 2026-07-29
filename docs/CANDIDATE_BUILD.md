@@ -7,7 +7,7 @@ Run **Actions → Build Aion Runtime candidates → Run workflow**. The workflow
 The MinIO destination is:
 
 ```text
-s3://xmos-agent/runtimes/candidates/aion-cli/<version>/<run-id>/<platform>/
+s3://xmos/agent/runtimes/candidates/aion-cli/<version>/<run-id>/<platform>/
 ```
 
 This directory is a build candidate, not a loadable Agent Runtime ZIP. It has no `signature.ed25519` and must not be imported into XMOS.
