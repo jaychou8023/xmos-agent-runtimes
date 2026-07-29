@@ -44,7 +44,7 @@ jobs:
       - run: npm ci
       - id: version
         shell: bash
-        run: echo "value=$(node -p \"require('./runtimes/runtime-sources.lock.json').aionCli.artifactVersion\")" >> "$GITHUB_OUTPUT"
+        run: node scripts/write-runtime-version-output.mjs --runtime aion-cli --github-output "$GITHUB_OUTPUT"
       - name: Install locked Rust toolchain
         if: matrix.platform != 'linux-x64'
         shell: bash
