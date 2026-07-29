@@ -1,0 +1,82 @@
+name: Upload Runtime artifacts to MinIO
+description: Upload verified Agent Runtime artifacts to a private MinIO bucket through its S3-compatible API.
+
+inputs:
+  source-path:
+    description: Directory containing verified installer artifacts and checksums.
+    required: true
+  destination:
+    description: Bucket-relative destination, without a leading slash.
+    required: true
+  endpoint:
+    description: MinIO S3 endpoint, supplied from a GitHub secret.
+    required: false
+  bucket:
+    description: MinIO bucket name, supplied from a GitHub secret.
+    required: false
+  access-key:
+    description: MinIO access key, supplied from a GitHub secret.
+    required: false
+  secret-key:
+    description: MinIO secret key, supplied from a GitHub secret.
+    required: false
+  prefix:
+    description: Optional bucket prefix.
+    required: false
+    default: xmos
+  insecure:
+    description: Set to true only for a trusted MinIO endpoint with a self-signed certificate.
+    required: false
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+    - id: config
+      shell: bash
+      env:
+        MINIO_ENDPOINT: ${{ inputs.endpoint }}
+        MINIO_BUCKET: ${{ inputs.bucket }}
+        MINIO_ACCESS_KEY: ${{ inputs.access-key }}
+        MINIO_SECRET_KEY: ${{ inputs.secret-key }}
+      run: |
+        set -euo pipefail
+        missing=()
+        for name in MINIO_ENDPOINT MINIO_BUCKET MINIO_ACCESS_KEY MINIO_SECRET_KEY; do
+          if [ -z "${!name}" ]; then
+            missing+=("$name")
+          fi
+        done
+        if [ "${#missing[@]}" -gt 0 ]; then
+          echo 'configured=false' >> "$GITHUB_OUTPUT"
+          echo "MinIO upload skipped: missing GitHub Secrets: ${missing[*]}." >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+        fi
+        echo 'configured=true' >> "$GITHUB_OUTPUT"
+    - name: Upload verified assets
+      if: steps.config.outputs.configured == 'true'
+      shell: bash
+      env:
+        AWS_ACCESS_KEY_ID: ${{ inputs.access-key }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.secret-key }}
+        AWS_DEFAULT_REGION: us-east-1
+        MINIO_ENDPOINT: ${{ inputs.endpoint }}
+        MINIO_BUCKET: ${{ inputs.bucket }}
+        MINIO_PREFIX: ${{ inputs.prefix }}
+        MINIO_INSECURE: ${{ inputs.insecure }}
+        SOURCE_PATH: ${{ inputs.source-path }}
+        DESTINATION: ${{ inputs.destination }}
+      run: |
+        set -euo pipefail
+        command -v aws >/dev/null
+        test -d "$SOURCE_PATH"
+        AWS_CONFIG_FILE="$RUNNER_TEMP/xmos-minio-aws-config"
+        export AWS_CONFIG_FILE
+        aws configure set default.s3.addressing_style path
+        target="s3://$MINIO_BUCKET/${MINIO_PREFIX#/}/$DESTINATION"
+        upload_args=(s3 cp "$SOURCE_PATH" "$target" --recursive --endpoint-url "$MINIO_ENDPOINT" --only-show-errors)
+        if [ "$MINIO_INSECURE" = 'true' ]; then
+          upload_args+=(--no-verify-ssl)
+        fi
+        aws "${upload_args[@]}"
+        echo "Uploaded verified assets to $target" >> "$GITHUB_STEP_SUMMARY"

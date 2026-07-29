@@ -1,0 +1,51 @@
+name: Upload Runtime candidate to MinIO
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        required: true
+        type: string
+      runtime:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+      platform:
+        required: true
+        type: string
+    secrets:
+      MINIO_ENDPOINT:
+        required: false
+      MINIO_BUCKET:
+        required: false
+      MINIO_ACCESS_KEY:
+        required: false
+      MINIO_SECRET_KEY:
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    name: Upload unsigned ${{ inputs.runtime }} candidate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: candidate-assets
+      - uses: ./.github/actions/upload-minio
+        with:
+          source-path: candidate-assets
+          destination: candidates/${{ inputs.runtime }}/${{ inputs.version }}/${{ github.run_id }}/${{ inputs.platform }}
+          endpoint: ${{ secrets.MINIO_ENDPOINT }}
+          bucket: ${{ secrets.MINIO_BUCKET }}
+          access-key: ${{ secrets.MINIO_ACCESS_KEY }}
+          secret-key: ${{ secrets.MINIO_SECRET_KEY }}
+          prefix: ${{ vars.MINIO_PREFIX || 'xmos/agent-runtimes' }}
+          insecure: ${{ vars.MINIO_INSECURE || 'false' }}

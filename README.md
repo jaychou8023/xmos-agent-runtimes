@@ -16,7 +16,8 @@ The XMOS desktop application's Host Bridges, permission system, credentials, ses
 1. A scheduled Action checks upstream Aion and Hermes tags.
 2. A detected tag creates a review PR under `automation/upstream-*`.
 3. After review, native runners build unsigned candidate payloads and run verification.
-4. A trusted release machine signs the ZIPs with Ed25519.
-5. The signed ZIPs, SHA-256 sums, SBOM and generated release notes are uploaded to a GitHub Release.
+4. Verified unsigned candidates are mirrored automatically to the private MinIO candidate path.
+5. A trusted release machine signs the ZIPs with Ed25519.
+6. The signed ZIPs, SHA-256 sums, SBOM and generated release notes are uploaded to a GitHub Release and the formal MinIO release path.
 
-See [docs/RELEASE_PROCESS.md](docs/RELEASE_PROCESS.md) for the release gate and repository conventions.
+See [docs/RELEASE_PROCESS.md](docs/RELEASE_PROCESS.md) for the release gate, and [docs/MINIO.md](docs/MINIO.md) for object-storage configuration.
