@@ -61,7 +61,8 @@ jobs:
       - name: Check out locked Hermes source
         shell: bash
         run: |
-          git clone --filter=blob:none https://github.com/NousResearch/hermes-agent build/hermes-source
+          git clone --filter=blob:none --no-checkout --config core.autocrlf=false https://github.com/NousResearch/hermes-agent build/hermes-source
+          git -C build/hermes-source config core.autocrlf false
           git -C build/hermes-source checkout --detach "${{ steps.source.outputs.value }}"
           test -z "$(git -C build/hermes-source status --porcelain=v1)"
       - name: Prepare unsigned Hermes payload on macOS or Windows

@@ -598,7 +598,8 @@ async function main() {
   if (sourceHead !== lock.hermes.source.commit) throw new Error(`Hermes source commit mismatch: ${sourceHead}`)
   const sourceStatus = (await run('git', ['status', '--porcelain=v1'], { capture: true, cwd: checkoutRoot })).stdout.trim()
   if (sourceStatus) throw new Error('Hermes 上游 checkout 存在本地修改；拒绝从非原样源码构建 Runtime')
-  await verifySha256(join(checkoutRoot, 'uv.lock'), lock.hermes.source.uvLockSha256, 'Hermes uv.lock')
+  // Do not hash the checkout file here: Windows Git may apply CRLF conversion.
+  // The immutable `git archive` below is verified before any dependency resolution.
 
   const output = resolve(options.output)
   const cacheRoot = resolve(options['cache-root'] || join(xmosBuildCacheRoot, 'runtime-cache'))
