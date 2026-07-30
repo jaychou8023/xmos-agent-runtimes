@@ -8,16 +8,19 @@
     "node": ">=24.11.0"
   },
   "scripts": {
+    "test": "node --test",
     "upstream:check": "node scripts/detect-upstream-updates.mjs",
     "runtime:build:aion": "node scripts/build-aion-runtime-binary.mjs",
     "runtime:prepare:aion": "node scripts/prepare-aion-runtime-payload.mjs",
     "runtime:prepare:hermes": "node scripts/prepare-hermes-runtime-payload.mjs",
     "runtime:verify-payload": "node scripts/verify-runtime-payload.mjs",
     "runtime:package": "node scripts/build-agent-runtime-package.mjs",
-    "runtime:sign:aion:win": "node scripts/sign-aion-windows-candidate.mjs"
+    "runtime:sign:aion:win": "node scripts/sign-aion-windows-candidate.mjs",
+    "runtime:release:publish": "node scripts/publish-runtime-release-from-candidate.mjs"
   },
   "dependencies": {
     "extract-zip": "2.0.1",
+    "minio": "^8.0.7",
     "yaml": "2.9.0"
   }
 }

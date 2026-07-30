@@ -23,7 +23,7 @@ inputs:
   prefix:
     description: Optional bucket prefix.
     required: false
-    default: agent/runtimes
+    default: runtimes
   insecure:
     description: Set to true only for a trusted MinIO endpoint with a self-signed certificate.
     required: false

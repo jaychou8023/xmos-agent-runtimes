@@ -57,7 +57,7 @@ SHA256SUMS
 The formal importable ZIPs are mirrored to:
 
 ```text
-s3://xmos/agent/runtimes/releases/aion-cli/<version>/<platform>/
+s3://xmos/runtimes/releases/aion-cli/<version>/<platform>/
 ```
 
 Download the ZIP from this `releases/` path and import it from XMOS **Agent Runtime** management. Do not use the unsigned `candidates/` path as an import source.
