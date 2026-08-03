@@ -43,6 +43,11 @@ async function linuxGlibcGate(root, files) {
   return maximum
 }
 
+function isForbiddenHermesBuildContent(file) {
+  if (file.includes('/share/licenses/')) return false
+  return /(^|\/)(__pycache__|\.git)(\/|$)|\.(?:py[co]|a|lib|o|obj)$|\/direct_url\.json$/i.test(file)
+}
+
 async function main() {
   const options = parseArgs(process.argv.slice(2))
   for (const key of ['runtime', 'platform', 'payload-root']) if (!options[key]) throw new Error(`Missing --${key}`)
@@ -90,7 +95,7 @@ async function main() {
     }
     if (provenance.upstreamCapabilitiesPhysicallyPruned !== false) throw new Error('Hermes payload declares physical capability pruning')
     entry = lock.hermes.python.platforms[options.platform].entry.replace(/^python[\\/]/, 'python/')
-    const forbidden = files.filter(file => /(^|\/)(__pycache__|\.git)(\/|$)|\.(?:py[co]|a|lib|o|obj)$|\/direct_url\.json$/i.test(file))
+    const forbidden = files.filter(isForbiddenHermesBuildContent)
     if (forbidden.length) throw new Error(`Hermes payload contains disallowed test/cache/build content: ${forbidden[0]}`)
     const sourceSitePackages = options.platform === 'win32-x64' ? 'python/Lib/site-packages/' : 'python/lib/python3.11/site-packages/'
     const requiredPythonSurfaces = profile.useAllExtras

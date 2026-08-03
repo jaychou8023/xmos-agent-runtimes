@@ -4,7 +4,6 @@ import { createReadStream } from 'node:fs'
 import { access, mkdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { basename, dirname, join, resolve } from 'node:path'
-import extractZip from 'extract-zip'
 
 export const projectRoot = resolve(import.meta.dirname, '../..')
 export const xmosBuildCacheRoot = resolve(process.env.XMOS_BUILD_CACHE || join(homedir(), '.cache', 'xmos-build'))
@@ -95,13 +94,17 @@ export async function run(command, args, options = {}) {
 export async function extractArchive(archivePath, destination) {
   await rm(destination, { force: true, recursive: true })
   await mkdir(destination, { recursive: true })
-  if (/\.(?:zip|whl)$/i.test(archivePath)) {
-    await extractZip(archivePath, { dir: destination })
-    return
-  }
   // bsdtar on Windows interprets `C:\\...` as a remote-style path because of
   // the drive-letter colon. Forward-slash absolute paths preserve the drive.
   const tarPath = path => process.platform === 'win32' ? resolve(path).replaceAll('\\', '/') : path
+  if (/\.(?:zip|whl)$/i.test(archivePath)) {
+    if (process.platform === 'win32') {
+      await run('tar.exe', ['-xf', tarPath(archivePath), '-C', tarPath(destination)])
+    } else {
+      await run('unzip', ['-q', archivePath, '-d', destination])
+    }
+    return
+  }
   await run(process.platform === 'win32' ? 'tar.exe' : 'tar', ['-xf', tarPath(archivePath), '-C', tarPath(destination)])
 }
 
