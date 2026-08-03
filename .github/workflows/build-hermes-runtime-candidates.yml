@@ -2,6 +2,27 @@ name: Build Hermes Runtime candidates
 
 on:
   workflow_dispatch:
+    inputs:
+      runtime:
+        description: Hermes runtime candidate to build
+        required: false
+        default: hermes-max
+        type: choice
+        options:
+          - all
+          - hermes-lite
+          - hermes-max
+      platform:
+        description: Target platform to build
+        required: false
+        default: win32-x64
+        type: choice
+        options:
+          - all
+          - darwin-arm64
+          - darwin-x64
+          - win32-x64
+          - linux-x64
   push:
     branches: [main]
     paths:
@@ -37,13 +58,19 @@ jobs:
             edition: lite
             platform: linux-x64
             runner: ubuntu-22.04
-          # Max is intentionally limited to macOS ARM64. The other Max platform
-          # dependency closures are not yet release-validated and must not be relabelled.
+          # Max stays automatic only on macOS ARM64; Windows x64 is available as
+          # an explicit manual candidate while its release gates are completed.
           - runtime: hermes-max
             edition: max
             platform: darwin-arm64
             runner: macos-15
+          - runtime: hermes-max
+            edition: max
+            platform: win32-x64
+            runner: windows-2025
+            manualOnly: true
     runs-on: ${{ matrix.runner }}
+    if: ${{ (matrix.manualOnly != true || github.event_name == 'workflow_dispatch') && (github.event_name != 'workflow_dispatch' || ((inputs.runtime == 'all' || inputs.runtime == matrix.runtime) && (inputs.platform == 'all' || inputs.platform == matrix.platform))) }}
     timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
