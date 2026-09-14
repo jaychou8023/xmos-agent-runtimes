@@ -8,9 +8,9 @@
         "commit": "0447482a0605c692d101a3c8c12327686c307b7d"
       },
       "latest": {
-        "tag": "v0.1.53",
-        "commit": "1644ef26c168e8002dcfa53ccd333054b40697d6",
-        "version": "0.1.53"
+        "tag": "v0.2.2",
+        "commit": "47e66d0d151123e973b3fd1e77afcb5671b3f8c5",
+        "version": "0.2.2"
       },
       "updateAvailable": true,
       "requiresReview": true,
@@ -27,9 +27,9 @@
         "commit": "5057f03bfdce539b3a2ed28b84920586f9c54338"
       },
       "latest": {
-        "tag": "v2026.7.20",
-        "commit": "3ef6bbd201263d354fd83ec55b3c306ded2eb72a",
-        "version": "2026.7.20"
+        "tag": "v2026.9.11",
+        "commit": "939e45c91d751fadd94dcd1b873ac3cb44846213",
+        "version": "2026.9.11"
       },
       "updateAvailable": true,
       "requiresReview": true,
